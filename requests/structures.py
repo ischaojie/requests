@@ -11,7 +11,9 @@ from collections import OrderedDict
 
 from .compat import Mapping, MutableMapping
 
-
+# NOTE: 大小写敏感的 dict
+# 继承自抽象类 MutableMapping
+# https://github.com/python/cpython/blob/a29470307308f64af9c55263cdd6e1984ba89925/Lib/_collections_abc.py#L928
 class CaseInsensitiveDict(MutableMapping):
     """A case-insensitive ``dict``-like object.
 
@@ -64,11 +66,7 @@ class CaseInsensitiveDict(MutableMapping):
 
     def lower_items(self):
         """Like iteritems(), but with all lowercase keys."""
-        return (
-            (lowerkey, keyval[1])
-            for (lowerkey, keyval)
-            in self._store.items()
-        )
+        return ((lowerkey, keyval[1]) for (lowerkey, keyval) in self._store.items())
 
     def __eq__(self, other):
         if isinstance(other, Mapping):
@@ -94,7 +92,7 @@ class LookupDict(dict):
         super(LookupDict, self).__init__()
 
     def __repr__(self):
-        return '<lookup \'%s\'>' % (self.name)
+        return "<lookup '%s'>" % (self.name)
 
     def __getitem__(self, key):
         # We allow fall-through here, so values default to None
